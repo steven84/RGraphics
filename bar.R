@@ -22,4 +22,75 @@ ggplot(ups, aes(x=Abb, y=Change, fill=Region)) + geom_bar(stat="identity")
 ggplot(ups, aes(x=reorder(Abb, Change), y=Change, fill=Region)) +
     geom_bar(stat="identity", colour="black") + 
     scale_fill_manual(values = c("#669933","#FFCC66")) + 
-    xlab("State")                      
+    xlab("State")
+
+csub <- subset(climate, Source=="Berkeley" & Year >= 1900)
+csub$pos <- csub$Anomaly10y >=0
+
+ggplot(csub, aes(x=Year, y=Anomaly10y, fill=pos)) +
+    geom_bar(stat = "identity", position = "identity")
+
+ggplot(csub, aes(x=Year, y=Anomaly10y, fill=pos)) +
+    geom_bar(stat = "identity", position = "identity", colour = "black", size = 0.25) +
+    scale_fill_manual(values = c("#CCEEFF","#FFDDDD"), guide=FALSE)
+
+ggplot(pg_mean, aes(x=group, y=weight)) + 
+    geom_bar(stat = "identity", width = 0.5 )
+
+ggplot(cabbage_exp, aes(x=Date, y=Weight, fill=Cultivar)) +
+    geom_bar(stat = "identity", position = position_dodge(0.7), width=0.5 )
+
+ggplot(cabbage_exp, aes(x=Date, y=Weight, fill=Cultivar)) +
+    geom_bar(stat = "identity" )
+
+ggplot(cabbage_exp, aes(x=Date, y=Weight, fill=Cultivar)) +
+    geom_bar(stat = "identity" ) +
+    guides(fill=guide_legend(reverse = TRUE))
+
+library(plyr)
+ggplot(cabbage_exp, aes(x=Date, y=Weight, fill=Cultivar, order=desc(Cultivar))) +
+    geom_bar(stat = "identity" )
+
+ggplot(cabbage_exp, aes(x=Date, y=Weight, fill=Cultivar)) +
+    geom_bar(stat = "identity", colour="black") +
+    guides(fill=guide_legend(reverse = TRUE)) +
+    scale_fill_brewer(palette = "Pastel1")
+
+library(gcookbook)
+library(plyr)
+ce <- ddply(cabbage_exp, "Date", transform, percent_weight = Weight / sum(Weight) * 100)
+
+ggplot(ce, aes(x=Date, y=percent_weight, fill=Cultivar)) +
+    geom_bar(stat = "identity")
+
+ggplot(ce, aes(x=Date, y=percent_weight, fill=Cultivar)) +
+    geom_bar(stat = "identity", colour = "black") +
+    guides(fill=guide_legend(reverse = TRUE)) +
+    scale_fill_brewer(palette = "Pastel1")
+
+ggplot(cabbage_exp, aes(x=interaction(Date, Cultivar), y=Weight)) +
+    geom_bar(stat="identity") +
+    geom_text(aes(label=Weight), vjust=1.5, colour="white")
+
+ggplot(cabbage_exp, aes(x=interaction(Date, Cultivar), y=Weight)) +
+    geom_bar(stat="identity") +
+    geom_text(aes(label=Weight), vjust=-0.2)
+
+ggplot(cabbage_exp, aes(x=interaction(Date, Cultivar), y=Weight)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(label=Weight), vjust=-0.2) +
+    ylim(0, max(cabbage_exp$Weight)*1.05)
+
+ggplot(cabbage_exp, aes(x=interaction(Date, Cultivar), y=Weight)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(y=Weight+0.1, label=Weight))
+
+
+
+
+
+
+
+
+
+
