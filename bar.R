@@ -85,12 +85,37 @@ ggplot(cabbage_exp, aes(x=interaction(Date, Cultivar), y=Weight)) +
     geom_bar(stat = "identity") +
     geom_text(aes(y=Weight+0.1, label=Weight))
 
+ggplot(cabbage_exp, aes(x=Date, y=Weight, fill=Cultivar)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    geom_text(aes(label=Weight), vjust=1.5, colour="white", position=position_dodge(.9))
 
+ce <- arrange(cabbage_exp, Date, Cultivar)
+ce <- ddply(ce, "Date", transform, label_y=cumsum(Weight))
+            
+ggplot(ce, aes(x=Date, y=Weight, fill=Cultivar)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(y=label_y, label=Weight), vjust=1.5, colour="white")
 
+ce <- arrange(cabbage_exp, Date, Cultivar)
+ce <- ddply(ce, "Date", transform, label_y=cumsum(Weight)-0.5*Weight)
 
+ggplot(ce, aes(x=Date, y=Weight, fill=Cultivar)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(y=label_y, label=Weight), vjust=1.5, colour="white")
 
+ggplot(ce, aes(x=Date, y=Weight, fill=Cultivar)) +
+    geom_bar(stat = "identity", colour="black") +
+    geom_text(aes(y=label_y, label=paste(format(Weight, nsmall = 2), "kg")), size=4) +
+    guides(fill=guide_legend(reverse = TRUE)) +
+    scale_fill_brewer(palette = "Pastel1")
 
+tophit <- tophitters2001[1:25,]
+ggplot(tophit, aes(x=avg, y=name)) + geom_point()
 
-
-
+ggplot(tophit, aes(x=avg, y=reorder(name, avg))) +
+    geom_point(size=3) +
+    theme_bw() +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.major.y = element_line(colour = "gray60", linetype = "dashed"))
 
